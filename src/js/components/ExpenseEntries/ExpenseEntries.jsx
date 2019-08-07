@@ -1,11 +1,45 @@
 import React, { Component } from 'react';
 
-export default class ExpenseEntries extends Component {
+import {
+    updateExpenseDescription,
+    updateExpenseAmount,
+    addExpense
+} from './expenseActions';
+
+class ExpenseEntries extends Component {
     constructor(props) {
         super(props);
+
+        // Here we're binding these methods to the context
+        // of the components. This only has to be done,
+        // because these methods are called back by
+        // event emitters (which lose context).
+        this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
+        this.handleAmountInput = this.handleAmountInput.bind(this);
+        this.handleAddExpense = this.handleAddExpense.bind(this);
+    }
+
+    handleDescriptionInput(event) {
+        // dispatch was provided by connect()
+        const { dispatch } = this.props;
+        const { value } = event.target;
+        dispatch(updateExpenseDescription(value));
+    }
+
+    handleAmountInput(event) {
+        const { dispatch } = this.props;
+        const { value } = event.target;
+        dispatch(updateExpenseAmount(value));
+    }
+
+    handleAddExpense() {
+        const { description, amount, dispatch } = this.props;
+        dispatch(addExpense(description, amount));
     }
 
     render() {
+        // These values were provided by connect()
+        const { description, amount, lineItems } = this.props;
         return (
             <div className='card border-danger mb-3'>
                 <div className='card-header text-white bg-danger'>Expense Entries</div>
@@ -13,11 +47,7 @@ export default class ExpenseEntries extends Component {
                     <form>
                         <div className='form-group'>
                             <label htmlFor='expense-description'>Description</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='expense-description'
-                            />
+                            <input type='text' className='form-control' id='expense-description' value={description} onChange={this.handleDescriptionInput} />
                         </div>
                         <div className='form-group'>
                             <label htmlFor='expense-amount'>Amount</label>
@@ -25,18 +55,10 @@ export default class ExpenseEntries extends Component {
                                 <div className='input-group-prepend'>
                                     <span className='input-group-text'>$</span>
                                 </div>
-                                <input
-                                    type='text'
-                                    className='form-control'
-                                    id='expense-amount'
-                                />
+                                <input type='text' className='form-control' id='expense-amount' value={amount} onChange={this.handleAmountInput} />
                             </div>
                         </div>
-                        <button
-                            type='button'
-                            className='btn btn-danger col-12 mb-5'
-                        >+ Add Expense
-            </button>
+                        <button type='button' className='btn btn-danger col-12 mb-5' onClick={this.handleAddExpense}>+ Add Expense</button>
                         <table className='table table-sm table-hover'>
                             <thead>
                                 <tr>
@@ -45,10 +67,12 @@ export default class ExpenseEntries extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Rent</td>
-                                    <td>$1,500.00</td>
-                                </tr>
+                                {lineItems.map(lineItem => (
+                                    <tr>
+                                        <td>{lineItem.description}</td>
+                                        <td>${lineItem.amount.toFixed(2)}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </form>
@@ -57,3 +81,5 @@ export default class ExpenseEntries extends Component {
         );
     }
 }
+
+export default ExpenseEntries;
