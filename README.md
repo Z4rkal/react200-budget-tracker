@@ -1,6 +1,6 @@
 # React/Redux Budget Tracker
 
-A bare bones react starter set of files
+This project uses Redux to build a simple budget tracker, it was built as part of an assignment at [@SanDiegoCodeSchool](https://github.com/SanDiegoCodeSchool).
 
 ## Setup
 
