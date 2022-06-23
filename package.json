@@ -57,7 +57,7 @@
     "eslint-plugin-lodash-fp": "^2.2.0-a1",
     "eslint-plugin-react": "^7.14.3",
     "esm": "^3.2.25",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.5.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^6.2.0",
     "nightmare": "^3.0.2",
